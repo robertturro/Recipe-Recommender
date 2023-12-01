@@ -9,8 +9,10 @@ import json
 from openpyxl import load_workbook
 from datetime import datetime
 
+# Global variables that control the number of recipes that show up in a search result at one time
 num1,num2 = 0,10
 
+# Function that allows a user to signup if they do not have an exisiting account. Django's UserCreationForm makes this process very easy
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -25,15 +27,16 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
-
+# After a user registers they will see a welcome page that will prompt them to begin searching for recipes so that their recommendations can be generated
 def first_time_dashboard(request):
     user = request.user.username
 
     return render(request, 'new_user_dash.html', {"user":user})
 
-
+# This function controls the recipe search form. 
 def recommend(request):
-
+    
+    # The file ingredients2.pickle is a file created in data_preprocessing.ipynb which contains all ingredients a user can filter a search on.
     with open(r'D:\recipe_recommender\recipe_recommender_webiste\recommender_app\static\ingredients2.pickle','rb') as f:
         ingreds = pickle.load(f)
 
@@ -91,8 +94,7 @@ def recommend(request):
     return render(request,'recommend.html',{'ingreds':d,'ethnicity':eth_d,'food_type':types_d,'holiday':hol_d,
         'dietary':dietary_restrict_d })
 
-
-
+# After submitting the search form this view will render the results page which outputs the desired recipes and allows users to like recipes as well.
 def results(request):
     global num1
     global num2
@@ -143,11 +145,6 @@ def results(request):
             
             liked_recipe.save()
 
-            #print(Liked_Recipes.objects.all())
-            
-
-    ## Use pagination instead
-
     elif (show_more != "yes") and (like_button != "yes"):
         num1,num2 = 0,10
 
@@ -155,8 +152,6 @@ def results(request):
         dietary = request.POST.getlist("dietary")
         eth = request.POST.getlist("ethnicity")
 
-        
-        
     d = {'ingredients_selected': [ingredients], 'calories': [calories],'protein':[protein],'carbs':[carbs],'sugar':[sugar],'time_filter':[time],'dietary_restriction':[dietary],
         'ethnicity':[eth],'dietary':[dietary],'time':[time]}
 
@@ -167,8 +162,8 @@ def results(request):
     return render(request,'results.html',{'recs': data,'ingredients':ingredients,'calories':calories,'sugar':sugar,
                                           'protein':protein,'time':time,'dietary':dietary,'ethnicity':eth})
 
-
-
+# This is the function that controls the user dashboard which holds the recommended recipes
+# New recipes are also recommended in this function by the getNeighbors function call which calls the getNeighbors function in recommendation.py
 def dashboard(request):
     new_like = request.POST.get("new_like")
 
@@ -189,9 +184,6 @@ def dashboard(request):
         user=request.user.username
         date_liked = datetime.today()
 
-        print(recipe)
-        print(recipe_name)
-
         liked_recipe = Liked_Recipes(recipe=recipe,user=user,
                     recipe_name=recipe_name,description=description,ingredients=ingredients,
                     steps=steps,calories=calories,protein=protein,carbs=carbs,sugar=sugar,
@@ -208,14 +200,13 @@ def dashboard(request):
 
     return render(request,'dashboard.html',{"recipes":recipes,"user":user,"recs":out_rec})
 
-
+# This view allows users to see all recipes they have liked
 def liked_recipes(request):
     liked = Liked_Recipes.objects.filter(user=request.user.username).order_by('-date_liked').all()
 
     return render(request,'liked_recipes.html',{"liked":liked})
 
-
-
+# The function that allowed for the recipe data extract to be uploaded into the Recipe_Data model
 def import_from_excel(request):
     if request.method == 'POST':
         excel_file = request.FILES['excel_file']
