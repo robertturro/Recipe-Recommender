@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<form action={% url 'recommender_app:results' %}  method="POST">
+    {% csrf_token %} 
+
+    <div class="text-center">
+        <div class="page-header">
+            <h1>Recipe Search</h1>
+        </div> 
+    </div>
+
+    <div class="container-fluid">
+
+        <br>
+
+        <div class="text-center">
+            <label for="ingredients">Select Key Ingredients (As Many as Desired)</label>
+            <br>
+            <select class="selectpicker" id="ingredients" name="ingredients" multiple data-live-search="true" data-width="700px" required>
+                <option value="Any">Any</option>
+                {% for k,v in ingreds.items %}
+                    <option value="{{ k }}">{{ v }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <br>
+
+        <div class="row justify-content-md-center">
+                <div class="form-group">
+                    <div class="text-center">
+                        <label for="total_fat">Nutrition</label>
+                        <br>
+                        <select class="selectpicker" id="calories" name="calories" data-live-search="true" data-width="700px" required>
+                            <option disabled selected>Calorie Amount</option>
+                            <option value="No Preference">No Preference</option>
+                            <option value="Low Calorie">Low Calorie</option>
+                            <option value="High Calorie">High Calorie</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    <select class="selectpicker" id="protein" name="protein" data-live-search="true" data-width="700px" required>
+                        <option disabled selected>Protein Amount</option>
+                        <option value="No Preference">No Preference</option>
+                        <option value="Low Protein">Low Protein</option>
+                        <option value="High Protein">High Protein</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    <select class="selectpicker" id="carb" name="carb" data-live-search="true" data-width="700px" required>
+                        <option disabled selected>Carb Amount</option>
+                        <option value="No Preference">No Preference</option>
+                        <option value="Low Carb">Low Carb</option>
+                        <option value="High Carb">High Carb</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    <select class="selectpicker" id="sugar" name="sugar" data-live-search="true" data-width="700px" required>
+                        <option disabled selected>Sugar Amount</option>
+                        <option value="No Preference">No Preference</option>
+                        <option value="Low Sugar">Low Sugar</option>
+                        <option value="High Sugar">High Sugar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    <label for="ingredients">Desired Time to Cook</label>
+                    <br>
+                    <select class="selectpicker" id="time" name="time" data-live-search="true" data-width="700px" required>
+                        <option value="Any Time" selected>Any Time</option>
+                        <option value="Less than 5 Hours">Less than 5 Hours</option>
+                        <option value="Less than 3 Hours">Less than 3 Hours</option>
+                        <option value="Less than 1 Hour">Less than 1 Hour</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    
+                    <label for="dietary_restriction">Dietary Restrictions</label>
+                    <br>
+
+                    <select class="selectpicker" id="dietary" name="dietary" multiple data-live-search="true" data-width="700px">
+                        <option value="None" selected>None</option>
+                        {% for k,v in dietary.items %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="form-group">
+                <div class="text-center">
+                    
+                    <label for="ethnicity">Ethnicity</label>
+
+                    <br>
+                    
+                    <select class="selectpicker" id="ethnicity" name="ethnicity"  multiple data-live-search="true" data-width="700px" required>
+                        <option value="Any">Any</option>
+                        {% for k,v in ethnicity.items %}
+                            <option value="{{ k }}">{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                </div>   
+            </div>
+        </div>
+
+
+        <br>
+
+        <div class="text-center">
+            <button type="submit" id="submit_rec" name="submit_rec" value="clicked" class="btn btn-primary">Search</button>
+        </div>
+
+    <div>
+
+   
+</form>
+
+
+
+<script>
+    $('select').selectpicker();
+</script>
+
+<style>
+
+    body::before{
+        content: ""; 
+        position: fixed; 
+        top: 0px; 
+        right: 0px; 
+        bottom: 0px; 
+        left: 0px; 
+        background-image: url('/static/picture.jpg');
+        opacity: 0.8;
+        z-index: -1;
+        background-size:cover;
+        filter: brightness(45%)
+            
+    }
+
+    .selectpicker {
+        width: 500px !important;
+    }
+
+    .container-fluid{
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        width: 900px;
+        border:5px solid rgb(135, 109, 76);
+        margin-bottom: 60px;
+        background-color: rgb(244, 246, 249);
+        opacity: 0.95;
+        filter: brightness(95%);
+       
+    }
+
+    button {
+        width: 300px;
+        font-size:xx-large;
+        margin-bottom: 10px;
+
+    }
+
+    .page-header {
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color:antiquewhite;
+    }
+
+    
+</style>
+
+
+
+
+
+
+
+
+{% endblock %}

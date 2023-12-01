@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% load widget_tweaks %}
+
+<br>
+
+<div class="text-center">
+    <h1>Recipe Recommender</h1>
+</div>
+
+<br>
+<br>
+
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="text-center">
+            <div class="card-header"><h5 style="font-family:Georgia, 'Times New Roman', Times, serif;">Login</h5></div>
+        </div>
+        <div class="card-body">
+            <div class="text-center">
+              <form method="post">
+                {% csrf_token %}
+                    <div class="form-label-group">
+                        {% render_field form.username placeholder=form.username.label class+="form-control" style="font-family:Georgia"%}
+                         
+                    </div>
+
+                    <br>
+
+                    <div class="form-label-group">
+                        {% render_field form.password placeholder=form.password.label class+="form-control" style="font-family:Georgia" %}
+                    </div>
+
+                    <br>
+
+                    <button type="submit" id='login_btn' class="btn btn-primary" style="font-family:Georgia, 'Times New Roman', Times, serif;">Login</button>
+                </form>
+
+                <br>
+                <a href="#" style="font-family:Georgia, 'Times New Roman', Times, serif;">Forgot password?</a>  
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<br>
+
+<div class="text-center" id="create_account">
+    Don't have an account yet?
+    <p>
+        <a href="/recommender_app/signup/" style="color: rgb(247, 178, 88);">Create an account</a>
+    </p>
+</div>
+
+
+
+<style>
+    .container{
+        width: 350px;
+        
+    }
+
+    .card{
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    #login_btn{ 
+        width: 275px;
+    }
+
+    
+    body::before{
+            content: ""; 
+            position: absolute; 
+            top: 0px; 
+            right: 0px; 
+            bottom: 0px; 
+            left: 0px; 
+            background-image: url('/static/picture.jpg');
+            opacity: 0.8;
+            z-index: -1;
+            
+            filter: brightness(45%);
+            
+        }
+
+    h1 {
+        font-weight: bold;
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        font-size:70px;
+        color:antiquewhite;
+    }
+
+    #create_account {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color: antiquewhite;
+    }
+
+
+</style>
+
+
+<!--
+
+
+-->
+
+{% endblock %}

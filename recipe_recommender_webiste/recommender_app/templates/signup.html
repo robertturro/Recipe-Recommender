@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load widget_tweaks %}
+
+<br>
+
+<div class="text-center">
+    <h1>Recipe Recommender</h1>
+</div>
+
+<br>
+<br>
+
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="text-center">
+            <div class="card-header"><h5 style="font-family:Georgia, 'Times New Roman', Times, serif;">Sign Up</h5></div>
+        </div>
+        <div class="card-body">
+            <div class="text-center">
+              <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                  <div class="form-label-group">
+                      {% render_field field placeholder=field.label class+="form-control" style="font-family:Georgia"%}
+                      {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                      {% endfor %}
+                  </div>
+
+                  <br>
+                {% endfor %}
+
+                  <button type="submit" id='login_btn' class="btn btn-primary" style="font-family:Georgia, 'Times New Roman', Times, serif;">Create Account</button>
+              </form>
+
+                <br>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!--  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
+    <button type="submit">Sign up</button>
+  </form>-->
+
+  <style>
+    .container{
+        width: 350px;
+        
+    }
+
+    .card{
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    #login_btn{
+        width: 275px;
+    }
+ 
+     
+    body::before{
+            content: ""; 
+            position: absolute; 
+            top: 0px; 
+            right: 0px; 
+            bottom: 0px; 
+            left: 0px; 
+            background-image: url('/static/picture.jpg');
+            opacity: 0.8;
+            z-index: -1;
+            
+            filter: brightness(45%);
+            
+        }
+
+    h1 {
+        font-weight: bold;
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        font-size:70px;
+        color:antiquewhite;
+    }
+
+    #create_account {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color: antiquewhite;
+    }
+  
+{% endblock %}

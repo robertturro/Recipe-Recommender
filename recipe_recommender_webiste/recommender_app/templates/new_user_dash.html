@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %} 
+
+<nav class="navbar navbar-light bg-light p-3" >
+    <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
+        <a class="navbar-brand" href="#">
+            Recipe Recommendation Dashboard
+        </a>
+        <button class="navbar-toggler d-md-none collapsed mb-3" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    
+    <div class="col-12 col-md-5 col-lg-8 d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+        <div class="dropdown">
+            <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+              Log Out
+            </button> 
+        </div>
+    </div>
+</nav>
+
+<!--<header></header>-->
+<div class="parallax">
+    <div class="parallax_text">
+        <div class="text-center">
+            <h1 class="h1">Welcome, {{ user }}!</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+      <!--"col-md-12 ml-sm-auto col-lg-10 px-md-4 py-4"-->
+        <main class= "col-12 px-md-4 py-4">
+            <br>
+            <br> 
+
+            
+
+            <br>
+            
+            <p>In you personalized recipe dashboard you will see recently liked recipes as well new recipes recommended for you.
+                To get started, begin searching for recipes by clicking the "Search Recipes" button below.
+            </p>
+
+            <br>
+            <br>
+            
+            
+            <div class="container">
+              <div class="row">
+                <div class="col text-center">
+                  <button class="btn btn-success" style="font-size: x-large;" onclick="location.href='{% url 'recommender_app:rec' %}'">Search Recipes!</button>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            
+           
+            
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<style>
+
+
+    body {
+        background-color:antiquewhite;
+        font-family:Georgia, 'Times New Roman', Times, serif;   
+        
+    }
+
+    nav {
+        background-color:antiquewhite;
+    }
+
+    .h1 {
+        color:antiquewhite;
+        font-weight: bold;
+        font-family:Georgia, 'Times New Roman', Times, serif;
+        font-size:60px;
+        filter:brightness(100%) !important;
+    }
+
+    
+    .parallax{
+        
+      background-image: url("/static/dash_pic2.jpg");
+      filter: brightness(100%);
+
+      min-height: 600px;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .parallax_text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    body, html {
+        height: 100%;
+    }
+
+
+
+</style>
+    
+    
+</style>
+
+
+{% endblock %}
