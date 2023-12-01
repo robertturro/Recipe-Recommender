@@ -1,2 +1,2 @@
-# Recipe-Recommender
-This repository will have a user input various foods and nutritional goals and output a personalized recipe.
+# Recipe Recommender Website
+The goal of this project was to create a website that allows a user to search for recipes by ingredient, nutritional information, time to cook, dietary restriction, and ethnicity (Italian, Mexican, Japanese, etc). After searching for recipes a user can scroll through all the options that are presented and can like any desired recipes. After searching for recipes a user can then go to a personalized dashboard which presents all previously liked recipes plus recommended recipes which are based off of the recipes that the user liked. 
