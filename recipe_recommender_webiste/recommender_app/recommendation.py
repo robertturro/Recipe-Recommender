@@ -15,8 +15,7 @@ from fuzzywuzzy import fuzz
 from .models import Recipe_Data
 from .models import Liked_Recipes, Recipe_Data
 
-
-
+# When a user searches for recipes this function is called and filters the Recipe_Data model based on the user input from the recipe search form.
 def filter_df(user_input):
     
     with open(r'D:\recipe_recommender\recipe_recommender_webiste\recommender_app\static\ingredients2.pickle','rb') as f:
@@ -31,8 +30,6 @@ def filter_df(user_input):
     with open(r'D:\recipe_recommender\recipe_recommender_webiste\recommender_app\static\dr_map.pkl','rb') as f2:
         dr_map = pickle.load(f2)
 
-    
-
     initial_ingreds = user_input['ingredients_selected'][0]
     time_filter = user_input['time'][0]
     dietary_restriction = user_input['dietary'][0]
@@ -42,15 +39,7 @@ def filter_df(user_input):
     carbs = user_input['carbs'][0]
     sugar = user_input['sugar'][0]
 
-    print(initial_ingreds[0])
-    print(time_filter)
-    print(ethnicity)
-    print(dietary_restriction)
-    print(calories)
-
-
     ingredients = []
-
 
     for i in range(len(ingreds)):
         for j in range(len(initial_ingreds)):
@@ -61,11 +50,7 @@ def filter_df(user_input):
     ingredients.extend(initial_ingreds)
 
     df = Recipe_Data.objects.all()
-    print(len(df))
-
     recipe_ids1 = []
-
-    #mydata = Member.objects.filter(firstname__startswith='L').values()
     
     if "Any" not in initial_ingreds:
         for i in ingredients:
@@ -90,8 +75,6 @@ def filter_df(user_input):
 
         df = df.filter(recipe__in=recipe_ids3)
         
-    print(len(df))
-
     if time_filter == "Less than 5 Hours": 
         df = df.filter(minutes__lte=300)
     if time_filter == "Less than 3 Hours":
@@ -99,9 +82,8 @@ def filter_df(user_input):
     if time_filter == "Less than 1 Hour":
         df = df.filter(minutes__lte=60)
     
-    print(len(df))
+    
     # All values precomputed in data_preprocessing.ipynb
-
     if calories == "Low Calorie":
         df = df.filter(calories__lte=200)
 
@@ -126,22 +108,19 @@ def filter_df(user_input):
     if carbs == "Low Carbs":
         df = df.filter(minutes__lte=5)
 
-    print(len(df))
-
     return df
 
-
+# Small function used to handle the number of recipes which are shown at once after a search
 def prepare_df(df,num1,num2):
-
     try:
         df = df.all()[num1:num2]
     except:
         df = df.all()[num1:]
         
-     
     return df
  
-
+# This is the main recommendation algorithm which uses the cosine distance between two arrays to determine their similarity. 
+# The arrays used are the tag bins for each row of of the
 def Similarity(liked_recipe, data_row):
 
     recipe_A = ast.literal_eval(data_row['tag_bins'])
@@ -151,7 +130,7 @@ def Similarity(liked_recipe, data_row):
     
     return Recipe_Distance
 
-
+# This function calls the Similarity functiton above
 def getNeighbors(liked):
     with open(r'D:\recipe_recommender\recipe_recommender_webiste\recommender_app\static\ingredients2.pickle','rb') as f:
         ingreds = pickle.load(f)
