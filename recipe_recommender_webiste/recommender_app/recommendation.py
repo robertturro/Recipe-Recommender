@@ -130,7 +130,10 @@ def Similarity(liked_recipe, data_row):
     
     return Recipe_Distance
 
-# This function calls the Similarity functiton above
+# This function loops through each liked recipe a user has and first checks if the liked recipe already had a value for the most_similar column.
+# The most_similar column is filled whenever a user likes that recipe and the most similar recipe is calculated. If any user has liked a certain recipe, the 
+# recipe will therefore have a most similar value and will not need to be computed again. If a certain recipe has never been liked before, or if the most similar 
+# recipe is already in a user's liked recipes, then a new most similar value must be computed.
 def getNeighbors(liked):
     with open(r'D:\recipe_recommender\recipe_recommender_webiste\recommender_app\static\ingredients2.pickle','rb') as f:
         ingreds = pickle.load(f)
@@ -146,10 +149,11 @@ def getNeighbors(liked):
     for k in range(len(liked_df)):
         r = liked_df.iloc[k]['recipe']
         ing = liked_df.iloc[k]['ingredients']
+        # Getting the most similar recipe
         recipe_data = Recipe_Data.objects.filter(recipe=r).values_list('most_similar')[0][0]
 
+        # Checking if recipe_data is none or aleady in the user's liked recipes
         if (recipe_data is not None) and (str(recipe_data) not in list(liked_df['recipe'])):
-            
             recommended.append(Recipe_Data.objects.filter(recipe=r).values_list('most_similar')[0][0])
             continue
 
@@ -158,29 +162,35 @@ def getNeighbors(liked):
             initial_ingreds = [i.strip() for i in initial_ingreds]
             ingredients = []
 
+            # Filtering the full recipe data to only include recipes with the ingredients of the liked recipe in order to improve
+            # recommendation results
             for i in range(len(ingreds)):
                 for j in range(len(initial_ingreds)):
                     if fuzz.ratio(initial_ingreds[j],ingreds[i]) > 75:
                         ingredients.append(ingreds[i])
 
-
             recipe_ids1 = []
             for i in ingredients:
                 recipe_ids1.extend(ingred_map[i])
-
+                
             filtered_data = full_data[full_data['recipe'].isin(recipe_ids1)]
             data = filtered_data[filtered_data['recipe'] != int(r)].reset_index()
             distances = []
 
+            # Looping through the filtered data and computing the similarity of each recipe to the liked recipe
             for j in range(len(data)):
                 
                 dist = Similarity(liked_df.iloc[k], data.iloc[j])
                 recipe_id = data[data.index == j]['recipe']
                 recipe_name = data[data.index ==j]['recipe_name']
                 distances.append((recipe_id,recipe_name, dist))
-                
+
+            # Getting the recipe with the smallest cosine distance
             distances.sort(key=operator.itemgetter(2))
             x = distances[0][0].reset_index()['recipe'][0]
+
+            # If the recipe with the smallest distance is in the user's liked recipes loop through the rest of the recipes
+            # until a new recipe is reached. 
             if str(x) in list(liked_df['recipe']):
                 i=1
                 while str(x) in list(liked_df['recipe']):
@@ -192,9 +202,11 @@ def getNeighbors(liked):
 
             recommended.append(x)
 
-            recipe_update = Recipe_Data.objects.get(recipe=r)
-            recipe_update.most_similar = x
-            recipe_update.save() 
+            # Only change the value of most_similar if it is None
+            if recipe_data is None:
+                recipe_update = Recipe_Data.objects.get(recipe=r)
+                recipe_update.most_similar = x
+                recipe_update.save() 
         
 
     return recommended
