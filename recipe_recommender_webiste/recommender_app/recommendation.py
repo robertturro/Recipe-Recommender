@@ -178,17 +178,17 @@ def getNeighbors(liked):
                 recipe_id = data[data.index == j]['recipe']
                 recipe_name = data[data.index ==j]['recipe_name']
                 distances.append((recipe_id,recipe_name, dist))
-
-                if dist < 0.2:
-                    break
                 
             distances.sort(key=operator.itemgetter(2))
             x = distances[0][0].reset_index()['recipe'][0]
             if str(x) in list(liked_df['recipe']):
                 i=1
                 while str(x) in list(liked_df['recipe']):
-                    x = distances[i][0].reset_index()['recipe'][0]
-                    i+=1
+                    try:
+                        x = distances[i][0].reset_index()['recipe'][0]
+                        i+=1
+                    except:
+                        continue
 
             recommended.append(x)
 
