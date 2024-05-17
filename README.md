@@ -9,4 +9,5 @@ The web framework used was python's Django. The final dataset made in the data_p
 
 The recommendation algorithm follows a Content-Based Filtering recommendation system in which the recipes that get recommended are the recipes that are most similar to recipes that the user has recently liked. The original data came with a tags attribute which consists of a list of tags that highlight keywords for each recipe. All unique tags for all recipes were made into one list and for each recipe a new feature called tag bins was created which consisted of 1 if the tag in the index of the complete tag list was in a specific recipe and 0 if not. This process can be found in the data_preprocessing.ipynb file. Therefore, to find the most similar recipe for a given recipe the cosine distance between the two tag bins are computed. This process can be found in the Similarity function of the recommendation.py file.
 
-A demo of how the website works and how it would look can be seen here: https://clipchamp.com/watch/anuN7lL3C2z
+A demo of how the website works and how it would look can be seen here: https://www.youtube.com/watch?v=l88IfrVeRWA
+
